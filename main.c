@@ -116,7 +116,7 @@ int main( void )
 			}
 		}
 		
-		game_display( &game );
+		//game_display( &game );
 	}
 	
 	return 0;
@@ -182,6 +182,33 @@ int shop( s_game* game )
 int rest( s_game* game )
 {
 	printf( "Rest\n" );
+	
+	if( game->gold < 10 )
+	{
+		printf( "Unfortunately Adventurer, you don't have enought gold.\n" );
+		if( game->artifacts > 0 )
+		{
+			printf( "Try selling some artifacts maybe?\n" );
+		}
+	}else{
+		printf( "Sure thing adventurer!\n Have a nice meal, and rest as you wish until tomorrow!\n" );
+		game->gold -= 10;
+		
+		// Bonus, you can rest to 110% of health
+		unsigned char rest = rand_int( 50, 60 );
+		if( game->health > (110-rest) )
+		{
+			game->health = 110;
+		}else{
+			game->health += rest;
+		}
+		
+		game->days ++;
+	}
+	
+	printf( "Also, would you like to save you progress?\n" );
+	printf( "[UNIMPLEMENTED YET]\n" );
+	
 	return 0;
 }
 
