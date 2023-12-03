@@ -76,6 +76,12 @@ int main( void )
 		scanf( "%c", &selection );
 		rewind( stdin );
 		
+		// lower case to upper case
+		if( (selection>='a') && (selection<='z') )
+		{
+			selection -= 'a' - 'A';
+		}
+		
 		separator();
 		
 		switch( selection )
@@ -126,7 +132,7 @@ int main( void )
 			
 			default:
 			{
-				printf( "Nani?\n" );
+				printf( "I don't understand you choice adventurer.\n" );
 				break;
 			}
 		}
@@ -254,7 +260,7 @@ int princess( s_game* game )
 {
 	//printf( "Princess!\n" );
 	
-	if( game->gold >= 100 )
+	if( game->gold >= 1000 )
 	{
 		printf( "You are wealthy" );
 		if( game->health >= 100 )
