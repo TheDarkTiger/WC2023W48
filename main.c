@@ -175,6 +175,23 @@ int adventure( s_game* game )
 int shop( s_game* game )
 {
 	printf( "Shop\n" );
+	
+	if( game->artifacts == 0 )
+	{
+		printf( "Unfortunately Adventurer, you don't have any artifacts.\n" );
+	}else{
+		unsigned long price = game->artifacts * rand_int( 10, 20 );
+		
+		if( game->gold < (0xFFFFFFFF-price) )
+		{
+			printf( "Sure thing Adventurer, have %ld gold for your %d artifacts!\n", price, game->artifacts );
+			game->gold += price;
+			game->artifacts = 0;
+		}else{
+			printf( "You are way too rich adventurer! Spend some gold first.\n" );
+		}
+	}
+	
 	return 0;
 }
 
@@ -191,7 +208,7 @@ int rest( s_game* game )
 			printf( "Try selling some artifacts maybe?\n" );
 		}
 	}else{
-		printf( "Sure thing adventurer!\n Have a nice meal, and rest as you wish until tomorrow!\n" );
+		printf( "Sure thing adventurer!\nHave a nice meal, and rest as you wish until tomorrow!\n" );
 		game->gold -= 10;
 		
 		// Bonus, you can rest to 110% of health
