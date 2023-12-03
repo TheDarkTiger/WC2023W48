@@ -11,6 +11,7 @@
 typedef struct t_game
 {
 	bool initilized;
+	bool married;
 	unsigned long days;
 	signed char health;
 	unsigned long gold;
@@ -49,14 +50,14 @@ int main( void )
 	rand_init();
 	
 	title( &game );
-	
+	separator();
 	
 	bool run = true;
 	while( run )
 	{
 		
 		// Selection screen
-		separator();
+		printf( "\n\n" );
 		printf( "Day %ld\n", game.days );
 		printf( "Health\t: %d\n", game.health );
 		printf( "Gold\t: %ld\n", game.gold );
@@ -74,6 +75,8 @@ int main( void )
 		fflush( stdin );
 		scanf( "%c", &selection );
 		rewind( stdin );
+		
+		separator();
 		
 		switch( selection )
 		{
@@ -98,6 +101,13 @@ int main( void )
 			case 'P':
 			{
 				princess( &game );
+				
+				if( game.married )
+				{
+					run = false;
+					separator();
+					printf( "Congratulations, adventurer!\n" );
+				}
 				break;
 			}
 			
@@ -135,6 +145,7 @@ int title( s_game* game )
 {
 	printf( "XIBRIFI\nCastle\n" );
 	
+	game->married = false;
 	game->days = 0;
 	game->health = 100;
 	game->gold = 20;
@@ -152,7 +163,7 @@ int title( s_game* game )
 
 int adventure( s_game* game )
 {
-	printf( "Adventure\n" );
+	//printf( "Adventure\n" );
 	
 	game->days += 1;
 	
@@ -174,7 +185,7 @@ int adventure( s_game* game )
 
 int shop( s_game* game )
 {
-	printf( "Shop\n" );
+	//printf( "Shop\n" );
 	
 	if( game->artifacts == 0 )
 	{
@@ -187,6 +198,8 @@ int shop( s_game* game )
 			printf( "Sure thing Adventurer, have %ld gold for your %d artifacts!\n", price, game->artifacts );
 			game->gold += price;
 			game->artifacts = 0;
+			
+			game->hash = game_get_hash( game );
 		}else{
 			printf( "You are way too rich adventurer! Spend some gold first.\n" );
 		}
@@ -198,7 +211,7 @@ int shop( s_game* game )
 
 int rest( s_game* game )
 {
-	printf( "Rest\n" );
+	//printf( "Rest\n" );
 	
 	if( game->gold < 10 )
 	{
@@ -221,6 +234,8 @@ int rest( s_game* game )
 		}
 		
 		game->days ++;
+		
+		game->hash = game_get_hash( game );
 	}
 	
 	printf( "Also, would you like to save you progress?\n" );
@@ -232,7 +247,26 @@ int rest( s_game* game )
 
 int princess( s_game* game )
 {
-	printf( "Princess!\n" );
+	//printf( "Princess!\n" );
+	
+	if( game->gold >= 100 )
+	{
+		printf( "You are wealthy" );
+		if( game->health >= 100 )
+		{
+			printf( " and well rested!\n" );
+			printf( "The princess is yours!\n" );
+			
+			game->married = true;
+			game->hash = game_get_hash( game );
+		}else{
+			printf( " but too tired!\n" );
+			printf( "Come back when you are full of energy!\n" );
+		}
+	}else{
+		printf( "Adventurer, you are not wealthy enough!\n" );
+	}
+	
 	return 0;
 }
 
@@ -241,6 +275,7 @@ void game_display( s_game* game )
 {
 	printf( "DEBUG:\n" );
 	printf( "Initialized\t: %d\n", game->initilized );
+	printf( "Married\t: %d\n", game->married );
 	printf( "Days\t: %ld\n", game->days );
 	printf( "Health\t: %d\n", game->health );
 	printf( "Gold\t: %ld\n", game->gold );
@@ -251,7 +286,7 @@ void game_display( s_game* game )
 
 unsigned long game_get_hash( s_game* game )
 {
-	return 0;
+	return (unsigned long)( game->initilized + game->married + game->days + game->health + game->gold + game->artifacts );
 }
 
 
