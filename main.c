@@ -83,6 +83,11 @@ int main( void )
 			case 'A':
 			{
 				adventure( &game );
+				if( game.health <= 0 )
+				{
+					printf( "Adventurer, you are dead!\nYou will be mourned.\n" );
+					run = false;
+				}
 				break;
 			}
 			
